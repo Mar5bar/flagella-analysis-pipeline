@@ -321,6 +321,8 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
         amplitudeSpatialFivePeriods = NaN;
         amplitudesAngularFivePeriods = {NaN};
         amplitudeAngularFivePeriods = NaN;
+        meanCurvSinglePeriodSmoothed = NaN;
+        medianCurvSinglePeriodSmoothed = NaN;
         maxCurvSinglePeriodSmoothed = NaN;
         minCurvSinglePeriodSmoothed = NaN;
         smoothedAngles = {NaN};
@@ -345,7 +347,7 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
             fivePeriodFrameRange = fivePeriodFrameRange - (fivePeriodFrameRange(end) - size(x,1));
         end
 
-        % Find max and min curvaturesWithinSingleBeat. First, fit a smoothing spline to eliminate
+        % Find mean, median, max and min curvaturesWithinSingleBeat. First, fit a smoothing spline to eliminate
         % noisy oscillations. Note that this fit is supposed to be crude, caring
         % only about the linear parts of the curves and not about the peaks in
         % angle. We'll do this only for the run of non-bad frames.
@@ -363,6 +365,8 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
             end
             curvaturesWithinSingleBeat(i-startFrameSinglePeriod,~mask) = NaN;
         end
+        meanCurvSinglePeriodSmoothed = mean(curvaturesWithinSingleBeat(:));
+        medianCurvSinglePeriodSmoothed = median(curvaturesWithinSingleBeat(:));
         [maxCurvSinglePeriodSmoothed, maxInd] = max(curvaturesWithinSingleBeat(:));
         [maxFrameInd, maxArcInd] = ind2sub(size(curvaturesWithinSingleBeat),maxInd);
         [minCurvSinglePeriodSmoothed, minInd] = min(curvaturesWithinSingleBeat(:));
@@ -447,6 +451,8 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
     fprintf(fh,'Overall error in reconstructed beat (0 is perfect): %f\n',qualityOfFitXYOptimal);
     fprintf(fh,'Number of phase cycles along flagellum: %f\n',numPhaseCycles);
     if singleAndFiveFrameAnalysisDone
+        fprintf(fh,'Mean signed curvature: %f\n',meanCurvSinglePeriodSmoothed);
+        fprintf(fh,'Median signed curvature: %f\n',medianCurvSinglePeriodSmoothed);
         fprintf(fh,'Max signed curvature: %f\n',maxCurvSinglePeriodSmoothed);
         fprintf(fh,'Min signed curvature: %f\n',minCurvSinglePeriodSmoothed);
         fprintf(fh,'kappa_P: %f\n',principalCurv);
