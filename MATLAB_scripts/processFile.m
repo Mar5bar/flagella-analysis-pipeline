@@ -246,6 +246,9 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
     staticAngle = windowedPowerSpectra(1,:);
     staticAngleSummed = trapz(arclengths, staticAngle);
 
+    % Record the average angle of the flagellum from the base, NOT using windowing.
+    averageFlagAngleFromBase = summedPowerSpectrum(1) / flagLength;
+
     % Frequency dominance of dominant frequency, measured as a proportion of
     % total power in spectrum without static part.
     domFreqDominance = domFreqAmpSummed / (sum(summedPowerSpectrum) - staticAngleSummed);
@@ -447,6 +450,7 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
     fprintf(fh,'Amp. dominant frequency / all (non-static) amp: %f\n',domFreqDominance);
     fprintf(fh,'Halfwidth of frequency bin (Hz): %f\n',windowHalfWidthHz);
     fprintf(fh,'Overall aggregated static angular amplitude: %f\n',staticAngleSummed);
+    fprintf(fh,'Average (over a period and arclength) angle of flagellum relative to base: %f\n',averageFlagAngleFromBase)
     fprintf(fh,'Relative error in reconstructed angle (0 is perfect): %f\n',qualityOfFitAngle);
     fprintf(fh,'Overall error in reconstructed beat (0 is perfect): %f\n',qualityOfFitXYOptimal);
     fprintf(fh,'Number of phase cycles along flagellum: %f\n',numPhaseCycles);
