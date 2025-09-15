@@ -185,38 +185,38 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
     [~,curvatureVelocity] = gradient(curvatures,1,timestamps);
 
     % Compute the Fourier spectra.
-    [complexSpectrum, powerSpectrum, frequencyDomain] = fourierSpectra(angles, samplingFrequency);
+    [complexSpectrum, amplitudeSpectrum, frequencyDomain] = fourierSpectra(angles, samplingFrequency);
     frequencyBinWidth = frequencyDomain(2) - frequencyDomain(1); % The size of the frequency bins.
 
     % Create a windowed spectrum, averaging the amplitudes in a centred window of width 2*windowWidth
     windowHalfWidthHz = 1; % The approximate halfwidth of the window, in Hz.
     windowHalfWidthBins = floor(windowHalfWidthHz / frequencyBinWidth);
-    windowedPowerSpectra = movmean(powerSpectrum,2*windowHalfWidthBins+1,1) * (2*windowHalfWidthBins+1);
+    windowedAmplitudeSpectra = movmean(amplitudeSpectrum,2*windowHalfWidthBins+1,1) * (2*windowHalfWidthBins+1);
 
     % Aggregate the Fourier amplitude spectrum over arclengths.
-    summedPowerSpectrum = trapz(arclengths,powerSpectrum,2);
-    windowedSummedPowerSpectrum = trapz(arclengths,windowedPowerSpectra,2);
+    summedAmplitudeSpectrum = trapz(arclengths,amplitudeSpectrum,2);
+    windowedSummedAmplitudeSpectrum = trapz(arclengths,windowedAmplitudeSpectra,2);
     proximalMask = arclengths < max(arclengths)/3;
     distalMask = arclengths >= 2*max(arclengths)/3;
     centralMask = ~(proximalMask | distalMask);
-    windowedSummedPowerSpectrum = trapz(arclengths,windowedPowerSpectra,2);
-    windowedSummedPowerSpectrumProximal = trapz(arclengths(proximalMask),windowedPowerSpectra(:,proximalMask),2);
-    windowedSummedPowerSpectrumCentral = trapz(arclengths(centralMask),windowedPowerSpectra(:,centralMask),2);
-    windowedSummedPowerSpectrumDistal = trapz(arclengths(distalMask),windowedPowerSpectra(:,distalMask),2);
+    windowedSummedAmplitudeSpectrum = trapz(arclengths,windowedAmplitudeSpectra,2);
+    windowedSummedAmplitudeSpectrumProximal = trapz(arclengths(proximalMask),windowedAmplitudeSpectra(:,proximalMask),2);
+    windowedSummedAmplitudeSpectrumCentral = trapz(arclengths(centralMask),windowedAmplitudeSpectra(:,centralMask),2);
+    windowedSummedAmplitudeSpectrumDistal = trapz(arclengths(distalMask),windowedAmplitudeSpectra(:,distalMask),2);
 
     % Find the dominant frequency, ignoring the static mode and the lowest bins aggregated with it.
-    [~, domFreqInd] = max(windowedSummedPowerSpectrum(windowHalfWidthBins+2:end)); domFreqInd = domFreqInd+windowHalfWidthBins+1;
+    [~, domFreqInd] = max(windowedSummedAmplitudeSpectrum(windowHalfWidthBins+2:end)); domFreqInd = domFreqInd+windowHalfWidthBins+1;
     domFreq = frequencyDomain(domFreqInd);
 
-    [~, domFreqIndProximal] = max(windowedSummedPowerSpectrumProximal(windowHalfWidthBins+2:end)); domFreqIndProximal = domFreqIndProximal+windowHalfWidthBins+1;
+    [~, domFreqIndProximal] = max(windowedSummedAmplitudeSpectrumProximal(windowHalfWidthBins+2:end)); domFreqIndProximal = domFreqIndProximal+windowHalfWidthBins+1;
     domFreqProximal = frequencyDomain(domFreqIndProximal);
-    [~, domFreqIndCentral] = max(windowedSummedPowerSpectrumCentral(windowHalfWidthBins+2:end)); domFreqIndCentral = domFreqIndCentral+windowHalfWidthBins+1;
+    [~, domFreqIndCentral] = max(windowedSummedAmplitudeSpectrumCentral(windowHalfWidthBins+2:end)); domFreqIndCentral = domFreqIndCentral+windowHalfWidthBins+1;
     domFreqCentral = frequencyDomain(domFreqIndCentral);
-    [~, domFreqIndDistal] = max(windowedSummedPowerSpectrumDistal(windowHalfWidthBins+2:end)); domFreqIndDistal = domFreqIndDistal+windowHalfWidthBins+1;
+    [~, domFreqIndDistal] = max(windowedSummedAmplitudeSpectrumDistal(windowHalfWidthBins+2:end)); domFreqIndDistal = domFreqIndDistal+windowHalfWidthBins+1;
     domFreqDistal = frequencyDomain(domFreqIndDistal);
 
     % Aggregated amplitude of the dominant frequency.
-    domFreqAmpSummed = windowedSummedPowerSpectrum(domFreqInd);
+    domFreqAmpSummed = windowedSummedAmplitudeSpectrum(domFreqInd);
 
     % Get the phase of the dominant frequency along the arclength.
     domFreqPhase = unwrap(angle(complexSpectrum(domFreqInd,:)));
@@ -232,7 +232,7 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
     end
 
     % Windowed amplitude of dominant frequency as a function of arclength.
-    domFreqAmp = windowedPowerSpectra(domFreqInd,:);
+    domFreqAmp = windowedAmplitudeSpectra(domFreqInd,:);
 
     %% Fit Legendre polynomials to domFreqPhase and domFreqAmp.
     [legendreFitDomFreqPhase, legendreComponentsDomFreqPhase, legendreCoeffsDomFreqPhase] = legendreFit(domFreqPhase);
@@ -243,15 +243,15 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
     % Windowed amplitude of static component as a function of arclength
     % (note that this is NOT static curvature, merely the average tangent
     % angle at each arclength).
-    staticAngle = windowedPowerSpectra(1,:);
+    staticAngle = windowedAmplitudeSpectra(1,:);
     staticAngleSummed = trapz(arclengths, staticAngle);
 
     % Record the average angle of the flagellum from the base, NOT using windowing.
-    averageFlagAngleFromBase = summedPowerSpectrum(1) / flagLength;
+    averageFlagAngleFromBase = summedAmplitudeSpectrum(1) / flagLength;
 
     % Frequency dominance of dominant frequency, measured as a proportion of
-    % total power in spectrum without static part.
-    domFreqDominance = domFreqAmpSummed / (sum(summedPowerSpectrum) - staticAngleSummed);
+    % total amplitude in spectrum without static part.
+    domFreqDominance = domFreqAmpSummed / (sum(summedAmplitudeSpectrum) - staticAngleSummed);
 
     % Reconstruct a beat using dominant frequency band. We'll do this by
     % removing all other non-static frequencies from the complex spectrum and
@@ -591,17 +591,17 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
     exportgraphics(gcf,[filepath,filesep,'fourierAmplitudeAlongArclength.png'])%,'ContentType','vector')
 
     clf
-    plot(frequencyDomain, summedPowerSpectrum,'Color','black')
+    plot(frequencyDomain, summedAmplitudeSpectrum,'Color','black')
     xline(domFreq)
     xlabel('Frequency (Hz)','Interpreter','latex')
     ylabel('Amplitude (rad)','Interpreter','latex')
     grid on
     set(gca,'FontSize',24)
-    exportgraphics(gcf,[filepath,filesep,'summedPowerSpectrum.png'])%,'ContentType','vector')
+    exportgraphics(gcf,[filepath,filesep,'summedAmplitudeSpectrum.png'])%,'ContentType','vector')
 
     clf
     [meshF, meshA] = meshgrid(frequencyDomain, arclengths);
-    surf(meshF, meshA, powerSpectrum','LineStyle','none')
+    surf(meshF, meshA, amplitudeSpectrum','LineStyle','none')
     xlabel('Frequency (Hz)','Interpreter','latex')
     ylabel('Arclength ($\mu$m)','Interpreter','latex')
     view(0,90)

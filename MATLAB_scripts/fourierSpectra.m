@@ -12,7 +12,7 @@ function [complexSpectrum, amplitudeSpectrumOneSided, frequencyDomain] = fourier
     % Compute the Fourier transform wrt time of the data.
     complexSpectrum = fft(data,L,1);
 
-    % Compute the 2-sided spectrum and convert to 1-sided power spectrum.
+    % Compute the 2-sided spectrum and convert to 1-sided amplitude spectrum.
     amplitudeSpectrumTwoSided = abs(complexSpectrum/L);
     amplitudeSpectrumOneSided = amplitudeSpectrumTwoSided(1:L/2 + 1,:); 
     amplitudeSpectrumOneSided(2:end-1,:) = 2 * amplitudeSpectrumOneSided(2:end-1,:);
