@@ -38,3 +38,60 @@ Descriptions of all computed quantities are saved in `output.mat` and viewable i
 MATLAB scripts require MATLAB (R2022a or above) with Curve Fitting Toolbox. Tested on MATLAB R2025b on macOS 15.6.1.
 
 Fiji scripts require [Fiji](https://imagej.net/software/fiji/) (v2.0.0 or above). Tested on Fijji 2.16.0 on macOS 15.6.1.
+
+## Pseudocode explanation
+
+### `Flagellum_Phase_TraceRawCoords.ijm`:
+
+1. **Initialisation**: Set default filtering and thresholding parameters, or overwrite them by reading `threshold.txt` if available.
+
+2. **File Iteration**: Loop through all `.tif` files in the directory.
+
+
+3. **Setup**:
+* Create specific output directories; skip analysis if `rawcoordinates.txt` already exists.
+* Load metadata to define the flagellum base coordinates and video crop regions.
+
+
+4. **Frame Processing (Loop)**:
+* **Pre-process**: Duplicate frame, apply Gaussian blur, Unsharp Mask, and background subtraction.
+* **Threshold**: Apply auto-thresholding and refined binary masking.
+* **Clean**: Remove bright artifacts and keep only the largest binary particle (the cell body/flagellum).
+
+
+5. **Skeletonisation & Tracing**:
+* Generate a skeleton of the binary shape and prune short branches.
+* Identify the skeleton terminus closest to the defined base point.
+* Trace the skeleton pixels pixel-by-pixel until a branch or end is reached.
+
+6. **Measurement**: Calculate the width of the flagellum at every traced point using a Euclidean distance map.
+
+
+7. **Output**: Save the traced coordinates and widths to `rawcoordinates.txt` and save a summary plot of traced points per frame.
+
+### `processFile.m`:
+
+1. **Initialise**: Set default parameters (filepath, sampling frequency, spatial scale, thresholds).
+2. **Load Data**: Import raw coordinates and width data from the text file.
+3. **Pre-process (Per Frame)**:
+* Separate flagellum from body using width thresholds.
+* Translate flagellum base to origin .
+* Rotate coordinates to align the cell orientation vector horizontally.
+* Compute arclengths and smooth spatial traces.
+
+
+4. **Filter & Resample**:
+* Identify "bad frames" (failed traces/short lengths).
+* Interpolate spatially to valid uniform arclength points.
+* Interpolate temporally to fill gaps in the "best range" of frames.
+
+
+5. **Geometric Analysis**: Compute tangent angles and curvature fields across time and space.
+6. **Fourier Analysis**:
+* Perform FFT on tangent angles.
+* Extract dominant frequency, amplitude profiles, and phase linearity.
+
+
+7. **Reconstruction**: Synthesise a theoretical beat from the dominant frequency and compare with actual data to assess quality of fit.
+8. **Beat Metrics**: Calculate beat period (via autocorrelation), max/min curvatures, shear velocities, and wave amplitudes.
+9. **Output**: Save computed statistics to `summary.txt`, generate diagnostic plots (kymographs, spectra, waveforms), and save workspace to `output.mat`.
