@@ -2,6 +2,10 @@
 
 MATLAB and Fiji (ImageJ) scripts associated with 'Axonemal dynein contributions to flagellar beat types and waveforms' by S. Fochler, M. H. Doran, T. Beneke, J. Smith, C. Fort, B. J. Walker, A. Brown, E. Gluenz, R. J. Wheeler.
 
+## Installation
+
+Download the repository as a .zip and extract. This should take less than 1 second on most machines.
+
 ## Usage
 
 
@@ -33,4 +37,4 @@ Descriptions of all computed quantities are saved in `output.mat` and viewable i
 
 MATLAB scripts require MATLAB (R2022a or above) with Curve Fitting Toolbox. Tested on MATLAB R2025b on macOS 15.6.1.
 
-Fiji scripts require [Fiji](https://imagej.net/software/fiji/). Tested on Fijji 2.16.0 on macOS 15.6.1.
+Fiji scripts require [Fiji](https://imagej.net/software/fiji/) (v2.0.0 or above). Tested on Fijji 2.16.0 on macOS 15.6.1.
