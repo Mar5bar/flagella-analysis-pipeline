@@ -56,7 +56,7 @@ Fiji scripts require [Fiji](https://imagej.net/software/fiji/) (v2.0.0 or above)
 4. **Frame Processing (Loop)**:
 * **Pre-process**: Duplicate frame, apply Gaussian blur, Unsharp Mask, and background subtraction.
 * **Threshold**: Apply auto-thresholding and refined binary masking.
-* **Clean**: Remove bright artifacts and keep only the largest binary particle (the cell body/flagellum).
+* **Clean**: Remove bright artefacts and keep only the largest binary particle (the cell body/flagellum).
 
 
 5. **Skeletonisation & Tracing**:
