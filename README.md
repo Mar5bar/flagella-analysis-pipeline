@@ -9,17 +9,19 @@ Download the repository as a .zip and extract. This should take less than 1 seco
 ## Usage
 
 
-### Waveform tracing from image data
+### Cell tracing from image data
 
 To trace flagellar waveforms from `.tif` files containing single cells, run `Flagellum_Phase_TraceRawCoords.ijm` from the `ImageJ_scripts` directory. When prompted, select the folder containing `.tif` imaging data.
 
-The script will generate a subdirectory for each processed file, outputting pixel coordinates of the flagellum for each frame in `rawcoordinates.txt` and saving the identified flagellar length in each frame in `traceProfile.png`.
+The script will generate a subdirectory for each processed file, outputting pixel coordinates of the body and flagellum for each frame in `rawcoordinates.txt` and saving the identified total length in each frame in `traceProfile.png`.
 
 Custom preprocessing parameters can be input on a per-directory basis by providing `threshold.txt` in the directory. An example is provided in the `example_data` directory. It is recommended to experiment with parameters before bulk analysing a new dataset.
 
 ### Waveform analysis
 
 To perform automated waveform analysis, run `batchProcess.m` in MATLAB. You will be prompted to select a directory containing traced images (i.e. the same directory that was processed in the previous step). Images will be processed in parallel (first-time runs may take longer than expected due to spinning up of the parallel pool).
+
+The flagellum will be identified from the overall skeleton using the approach described by Walker, Ishimoto and Wheeler [here](https://doi.org/10.1038/s41598-019-41459-9). In brief, the observed width of the cell is used to identify the flagellum as a region of largely consistent width.
 
 A range of plots (`.png`) and summary statistics (`summary.txt` and `output.mat`) will be created in the identified subdirectories. Statistics can be aggregated across files by running `aggregateData.m` in MATLAB and selecting a processed directory.
 
