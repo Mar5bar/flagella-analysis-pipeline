@@ -1,0 +1,50 @@
+/Users/ben/Documents/Research/Topics/Richard/Richard_Sophia_Pipeline/analysisPipeline/example_data/example.tif_analysis/rawcoordinates.txt
+Bad file (< 30 good frames or lots of interpolation):  false.
+Short file (fewer than 5 beats captured):  false.
+Messages: 
+Number of frames (total): 100.000000
+Number of bad frames in file: 0.000000
+Proportion of bad frames in file: 0.000000
+Number of frames (analysed): 100.000000
+Number of bad frames (analysed): 0.000000
+Proportion of bad frames (analysed): 0.000000
+Start frame: 1.000000
+End frame: 100.000000
+Single period start frame: 1.000000
+Single period end frame: 17.000000
+Flagellum length: 70.834411
+Analysed flagellum length: 63.750969
+Sampling frequency (Hz): 200.000000
+Dominant frequency (Hz): 12.000000
+Dominant frequency (proximal) (Hz): 12.000000
+Dominant frequency (central) (Hz): 12.000000
+Dominant frequency (distal) (Hz): 12.000000
+Legendre coeffs of amplitude of dominant frequency: 0.56804     0.09496    -0.16976
+Legendre coeffs of phase of dominant frequency: 3.3308      1.6725    0.054459
+Linearity of phase as a function of arclength: 0.994817
+Approximate period (1/frequency) (s): 0.083333
+Approximate frames per beat: 17.000000
+Overall aggregated angular amplitude of dominant frequency: 36.213413
+Amp. dominant frequency / all (non-static) amp: 0.207147
+Halfwidth of frequency bin (Hz): 1.000000
+Overall aggregated static angular amplitude: 4.951291
+Average (over a period and arclength) angle of flagellum relative to base: 0.069900
+Relative error in reconstructed angle (0 is perfect): 0.733991
+Overall error in reconstructed beat (0 is perfect): 0.128915
+Number of phase cycles along flagellum: 0.471277
+Mean signed curvature: -0.000378
+Median signed curvature: 0.000999
+Max signed curvature: 0.068392
+Min signed curvature: -0.061188
+kappa_P: 0.068392
+kappa_R: 0.061188
+V_P: 74.939827
+V_R: 67.237305
+Frequency from autocorrelation (Hz): 11.207434
+Period from autocorrelation (s): 0.089226
+Spatial amplitude, single period: 34.860224
+Spatial amplitude, five periods: 36.818703
+Spatial amplitude, all data: 37.229408
+Fourier amplitude, single period (rad): 1.152244
+Fourier amplitude, five periods (rad): 1.218627
+Fourier amplitude, all data (rad): 1.218627

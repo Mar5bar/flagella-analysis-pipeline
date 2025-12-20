@@ -1,4 +1,4 @@
-function batchProcess(sourceDir)
+ function batchProcess(sourceDir)
 
 %% Batch script for processing a directory of output.
 % Frame rate, in Hz.
