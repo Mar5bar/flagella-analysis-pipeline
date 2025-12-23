@@ -9,10 +9,10 @@ function processFile(filepath, filename, samplingFrequency, spatialScale, arclen
         filename = 'rawcoordinates.txt';
     end
     if nargin < 3
-        samplingFrequency = 100;
+        samplingFrequency = 200; % Sampling frequency of data in Hz.
     end
     if nargin < 4
-        spatialScale = 1;
+        spatialScale = 0.06989247312; % 1 pixel in micrometres.
     end
     if nargin < 5
         arclengthThreshold = 0.9;
