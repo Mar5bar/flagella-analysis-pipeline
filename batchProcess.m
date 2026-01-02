@@ -4,7 +4,7 @@
 % Frame rate, in Hz.
 frameRate = 200;
 % Spatial scale, in um per pixel.
-spatialScale = 1;
+spatialScale = 0.065;
 % The threshold below which we reject frames, based on what proportion of the
 % overall flagellum length is traced from the frame. 0.9 will reject frames
 % where less than 90% of the flagellum has been traced. NOTE: we'll truncate
